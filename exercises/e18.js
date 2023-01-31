@@ -5,26 +5,16 @@ import { data } from "../data/data";
 // Return example: 1902
 
 export function getGreatestDiscoveryYear(data) {
-    let yearCount = {};
-  
-    data.asteroids.forEach(asteroid => {
+    let yearCount = data.asteroids.reduce((count, asteroid) => {
         let year = asteroid.discoveryYear;
-        if (year in yearCount) {
-        yearCount[year]++;
-        } else {
-        yearCount[year] = 1;
-        }
+        count[year] = (count[year] || 0) + 1;
+        return count;
+    }, {});
+  
+    let greatestYear = Object.keys(yearCount).reduce((maxYear, year) => {
+        return yearCount[year] > yearCount[maxYear] ? year : maxYear;
     });
-    
-    let greatestYear = 0;
-    let greatestCount = 0;
-    for (const year in yearCount) {
-        if (yearCount[year] > greatestCount) {
-        greatestYear = year;
-        greatestCount = yearCount[year];
-        }
-    }
-    
+  
     return Number(greatestYear);
 }
 
